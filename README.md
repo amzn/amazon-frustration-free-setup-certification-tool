@@ -23,8 +23,23 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
 
 ## Test Machine Environment setup
 
-* Please download and install **Python3, JDK, Android SDK, and Appium** 
+* Please download and install **Python3 (>=3.7.9), JDK, Android SDK, and Appium (1.20.2)** 
 * Please configure $PATH, $JAVA_HOME and $ANDROID_HOME to run **adb** and **appium** commands
+* Please run the commands below to verify the environment setup
+```
+$ python --version
+Python 3.7.9
+```
+```
+$ adb --version
+Android Debug Bridge version 1.0.41
+Version 30.0.5-6877874
+Installed as ***/Android/sdk/platform-tools/adb
+```
+```
+$ appium --version
+1.20.2
+```
 
 ## Run Test Scripts
 Open a terminal on Mac/Linux or PowerShell (Admin) on Windows
