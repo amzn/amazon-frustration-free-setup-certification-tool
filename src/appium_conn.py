@@ -78,7 +78,7 @@ class AppiumConn:
             appium_cmd = 'appium'
 
         AppiumConn.port = server_port
-        start_cmd = f'{appium_cmd} -p {AppiumConn.port} --log logs/appium_server_logs.txt'.split()
+        start_cmd = f'{appium_cmd} -p {AppiumConn.port} --log logs/appium_server_log.txt'.split()
         subprocess.Popen(start_cmd)
         logging.info('Appium Server is up')
         time.sleep(SLEEP_TIME_BEFORE_APPIUM_CLIENT_CONNECT_IN_SECOND)

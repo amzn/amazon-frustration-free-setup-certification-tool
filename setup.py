@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Amazon-FFS-Certification-Tool",
-    version="0.0.1",
+    version="1.0",
     description="Automation test scripts for devices Zero Touch Setup Test",
     packages=find_packages()
 )
