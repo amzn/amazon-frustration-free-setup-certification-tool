@@ -92,8 +92,8 @@ Run 5 iterations against ZSS device named "First light" and continue the executi
 ```
 ## Test Report and Logging
 * **pytest.ini** file includes pytest configuration:
-    ** log-cli settings enable the live log and test summary from console output 
-    ** log-file settings save the logging to **pytest_log.txt** in logs folder
+    * log-cli settings enable the live log and test summary from console output 
+    * log-file settings save the logging to **pytest_log.txt** in logs folder
 * **appium_server_log.txt** from logs folder includes all appium_server logs during the test
 
 ## Security
