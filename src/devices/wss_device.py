@@ -20,10 +20,10 @@ class WSSDevice(Device):
 
     def __init__(self, names):
         super().__init__(names)
-        # TODO: define appium connection instance with 3P app desired capabilities
+        # Guide: define appium connection instance with 3P app desired capabilities
 
     def factory_reset(self):
-        # TODO: within 3P app appium connection context, control the 3P app to remove DUT
+        # Guide: within 3P app appium connection context, control the 3P app to remove DUT
         pass
 
     def pre_associate_with_customer_id(self):
@@ -34,4 +34,4 @@ class WSSDevice(Device):
 
     def check_device_setup(self):
         super().check_device_setup()
-        # TODO: check DUT from 3P app
+        # Guide: check DUT from 3P app
