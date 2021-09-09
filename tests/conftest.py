@@ -20,7 +20,7 @@ def pytest_addoption(parser):
         '--ffs_type',
         action='store',
         default='BSS',
-        help='FFS protocol type, one of ["ACK", "BSS", "ZSS", "WSS"] for now'
+        help='FFS protocol type, one of ["BSS", "ZSS"] for now'
     )
     parser.addoption(
         "--name_of_plug_to_control_dut",

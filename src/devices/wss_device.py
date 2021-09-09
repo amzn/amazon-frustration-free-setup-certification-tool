@@ -20,22 +20,11 @@ class WSSDevice(Device):
 
     def __init__(self, names):
         super().__init__(names)
-        self.kasa_app_desired_caps = {
-            "platformName": "Android",
-            "deviceName": "Android",
-            "appPackage": "com.tplink.kasa_android",
-            "appActivity": "com.tplink.hellotp.activity.SplashScreenActivity",
-            "newCommandTimeout": 0,
-            "noReset": True,
-            "udid": get_phone_uuid(),
-            "automationName": "UiAutomator2"
-        }
-        self.kasa_app = AppiumConn(self.kasa_app_desired_caps)
+        # TODO: define appium connection instance with 3P app desired capabilities
 
     def factory_reset(self):
-        with self.kasa_app.appium_conn_context() as driver:
-            kasa_pages = KasaAppPageObjects(driver, self.names[2])
-            kasa_pages.remove_dut()
+        # TODO: within 3P app appium connection context, control the 3P app to remove DUT
+        pass
 
     def pre_associate_with_customer_id(self):
         logging.info('Permanent pre-association must be setup for WSS device ZTS. If not, test will fail.')
@@ -44,10 +33,5 @@ class WSSDevice(Device):
         logging.info('No need to power cycle provisioner for WSS device ZTS setup.')
 
     def check_device_setup(self):
-        # Check dut on Alexa App
         super().check_device_setup()
-
-        # Check dut on Kasa App
-        with self.kasa_app.appium_conn_context() as driver:
-            kasa_pages = KasaAppPageObjects(driver, self.names[2])
-            kasa_pages.wait_until_smart_dut_present(SLEEP_TIME_WAIT_FOR_SMART_DUT_PRESENT_IN_SECOND)
+        # TODO: check DUT from 3P app

@@ -18,8 +18,9 @@ from src.device import *
 class ACKDevice(Device):
 
     def pre_associate_with_customer_id(self):
-        logging.info('Please setup pre-association within 2 minutes.')
-        time.sleep(SLEEP_TIME_WAIT_FOR_MANUALLY_PRE_ASSOCIATION_IN_SECOND)
+        # TODO: Call the API to pre associate the device with customer id
+        logging.info("ACK device has not been supported by this automation tool yet.")
+        pass
 
     def power_cycle_provisioner(self):
         logging.info('No need to power cycle provisioner for ACK device ZTS setup.')

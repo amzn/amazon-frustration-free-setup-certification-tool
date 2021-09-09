@@ -5,7 +5,7 @@ Python-based automation test scripts which can help Non-Amazon device partners t
 ## Frustration Free Setup Overview
 See [Understanding Frustration-Free Setup](https://developer.amazon.com/docs/frustration-free-setup/understanding-ffs.html) for more information.
 
-## Frustration Free Setup Process
+## Frustration Free Setup Certification Process
 See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustration-free-setup/provisionee-certification.html) for more information.
 
 ## Requirements and Getting started
@@ -14,7 +14,7 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
     * Alexa App installed and login with your Amazon account
     * The phone is connected with your test machine (Windows, MacOS or Linux) with USB connection.
 * 1 Amazon provisioner device, which is registered to your Amazon account
-* 1 Device under test(certificate), called DUT/dut in this document
+* 1 Device under test(certificate), called DUT in this document
 * 2 Smart plug devices ([Amazon Smart Plug](https://www.amazon.com/dp/B089DR29T6))
     * Both are registered to your Amazon account
     * The provisioner device is connected to one smart plug, and the plug is **ON**
@@ -23,7 +23,7 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
 
 ## Test Machine Environment setup
 
-* Please download and install **Python3 (>=3.7.9), JDK, Android SDK, and Appium (1.20.2)** 
+* Please download and install **Python3 (>=3.7), JDK, Android SDK, and Appium (1.20.2)** 
 * Please configure $PATH, $JAVA_HOME and $ANDROID_HOME to run **adb** and **appium** commands
 * Please run the commands below to verify the environment setup
 ```
@@ -74,7 +74,7 @@ $ source venv/bin/activate
 **Options:**
 
 **--ffs_type**
-* FFS protocol type, one of ["ACK", "BSS", "ZSS"], "BSS" as default
+* FFS protocol type, one of ["BSS", "ZSS"], "BSS" as default
 
 **--name_of_plug_to_control_dut**
 * Name of the smart plug (displayed on Alexa App) to power on and off DUT, **"First plug"** as default</br>
@@ -85,17 +85,16 @@ $ source venv/bin/activate
 **--name_of_dut**
 * Name of the device under test displayed on Alexa App after the setup, required option
 
+**--appium_server_port**
+* Port used to start appium server on localhost, **4723** as default
+
 **--count**
 * Num of iterations
 
 **-x**
 * Use it to stop the execution if any iteration failed
 
-**--appium_server_port**
-* Port used to start appium server on localhost, **4723** as default
-
-
-**Examples**
+**Examples:**
 
 Run 10 iterations against BSS device named "First switch" and stop the execution if any iteration failed
 ```
@@ -110,6 +109,11 @@ Run 5 iterations against ZSS device named "First light" and continue the executi
     * log-cli settings enable the live log and test summary from console output 
     * log-file settings save the logging to **pytest_log.txt** in logs folder
 * **appium_server_log.txt** from logs folder includes all appium_server logs during the test
+
+## Notes
+* So far the tool only supports multiple rounds of BSS or ZSS test as removing both types of devices from Alexa App will factory reset them
+* It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override factory_reset() in wss_device.py
+* ACK device will be supported soon
 
 ## Security
 
