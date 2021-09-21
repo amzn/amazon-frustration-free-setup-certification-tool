@@ -12,7 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-from src.kasa_app_page_objects import KasaAppPageObjects
 from src.device import *
 
 
@@ -20,18 +19,18 @@ class WSSDevice(Device):
 
     def __init__(self, names):
         super().__init__(names)
-        # Guide: define appium connection instance with 3P app desired capabilities
+        logging.info("Need to override __init__() to support WSS.")
+        # <Please define appium connection instance with 3P app desired capabilities here>
 
-    def factory_reset(self):
-        # Guide: within 3P app appium connection context, control the 3P app to remove DUT
-        pass
-
-    def pre_associate_with_customer_id(self):
-        logging.info('Permanent pre-association must be setup for WSS device ZTS. If not, test will fail.')
+    def factory_reset_and_power_off(self):
+        logging.info("Need to override factory_reset_and_power_off() to support WSS.")
+        # <Please remove DUT within 3P app appium connection context here>
+        # super().power_off()
 
     def power_cycle_provisioner(self):
-        logging.info('No need to power cycle provisioner for WSS device ZTS setup.')
+        logging.info('No need to power cycle the provisioner for WSS device ZTS setup.')
 
-    def check_device_setup(self):
-        super().check_device_setup()
-        # Guide: check DUT from 3P app
+    def power_on_and_check_setup(self):
+        logging.info("Need to override power_on_and_check_setup() to support WSS.")
+        # super().power_on_and_check_setup()
+        # <Please check DUT from 3P app here>

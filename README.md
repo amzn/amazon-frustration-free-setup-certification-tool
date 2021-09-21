@@ -13,13 +13,14 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
 * 1 Android phone in USB debugging mode
     * Alexa App installed and login with your Amazon account
     * The phone is connected with your test machine (Windows, MacOS or Linux) with USB connection.
-* 1 Amazon provisioner device, which is registered to your Amazon account
-* 1 Device under test(certificate), called DUT in this document
-* 2 Smart plug devices ([Amazon Smart Plug](https://www.amazon.com/dp/B089DR29T6))
-    * Both are registered to your Amazon account
-    * The provisioner device is connected to one smart plug, and the plug is **ON**
-    * The DUT is connected to the other smart plug, and the plug is **ON** if DUT has been registered to your Amazon account, or **OFF** if DUT is in factory reset mode
-* DUT information has been uploaded to the Amazon device setup service for permanent association between your Amazon account and DUT.
+* 1 Provisioner device, which is registered to your Amazon account, see recommended devices from [Understanding Frustration-Free Setup - Testing Your Device](https://developer.amazon.com/docs/frustration-free-setup/understanding-ffs.html#testing-your-device)
+* 1 Provisionee device, your device under test, called DUT in this document
+* 2 Control devices, [Amazon Smart Plugs](https://www.amazon.com/dp/B089DR29T6) are recommended
+    * Please register both to your Amazon account.
+    * Please plug DUT on top of one smart plug, and turn that plug **ON** if DUT has been registered to your Amazon account, or **OFF** if DUT is in factory reset mode.
+    * Please plug the provisioner device on top of the other smart plug, and turn it **ON**.
+* Please submit your DUT to pre-register our device setup service via [Submit Test Devices](https://developer.amazon.com/frustration-free-setup/console/manage/submit-test-devices)
+
 
 ## Test Machine Environment setup
 
@@ -112,8 +113,7 @@ Run 5 iterations against ZSS device named "First light" and continue the executi
 
 ## Notes
 * So far the tool only supports multiple rounds of BSS or ZSS test as removing both types of devices from Alexa App will factory reset them
-* It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override factory_reset() in wss_device.py
-* ACK device will be supported soon
+* It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override methods in wss_device.py
 
 ## Security
 

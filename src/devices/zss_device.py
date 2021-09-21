@@ -17,5 +17,5 @@ from src.device import *
 
 class ZSSDevice(Device):
 
-    def pre_associate_with_customer_id(self):
-        logging.info('Permanent pre-association must be setup for ZSS device ZTS. If not, test will fail.')
+    def __init__(self, names):
+        super().__init__(names)

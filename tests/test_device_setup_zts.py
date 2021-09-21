@@ -12,7 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import logging
 import time
 
 from src.devices.ack_device import ACKDevice
@@ -21,7 +20,7 @@ from src.devices.wss_device import WSSDevice
 from src.devices.zss_device import ZSSDevice
 from src.appium_conn import AppiumConn
 
-SLEEP_TIME_BETWEEN_ROUNDS_IN_SECOND = 20
+SLEEP_TIME_BETWEEN_ROUNDS_IN_SECOND = 10
 
 
 def test_zts(ffs_type, name_of_plug_to_control_dut, name_of_plug_to_control_provisioner, name_of_dut, appium_server_port):
@@ -44,15 +43,9 @@ def test_zts(ffs_type, name_of_plug_to_control_dut, name_of_plug_to_control_prov
 
     AppiumConn.start_appium_server(appium_server_port)
     try:
-        device.factory_reset()
-        device.power_off()
-        device.pre_associate_with_customer_id()
+        device.factory_reset_and_power_off()
         device.power_cycle_provisioner()
-        device.power_on()
-        setup_time = time.time()
-        device.check_device_setup()
-        setup_time = time.time() - setup_time
-        logging.info(f'The setup time of smart device "{name_of_dut}" is {setup_time:.2f} seconds')
+        device.power_on_and_check_setup()
     finally:
         AppiumConn.stop_appium_server()
         # Sleep some time to allow previous appium session closed properly for next round of test

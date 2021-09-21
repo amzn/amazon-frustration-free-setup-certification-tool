@@ -38,6 +38,7 @@ class AppiumConn:
     """
     This class is used to define an object to control Alexa app on mobile device
     """
+    port = 4723
 
     def __init__(self, capabilities):
         """

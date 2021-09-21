@@ -24,7 +24,6 @@ NUM_OF_SWIPE_TO_FIND_DEVICE = 2
 
 # Timeouts
 SLEEP_TIME_WAIT_FOR_PROVISIONER_IN_SECOND = 60
-SLEEP_TIME_WAIT_FOR_MANUALLY_PRE_ASSOCIATION_IN_SECOND = 120
 SLEEP_TIME_WAIT_FOR_SMART_DUT_PRESENT_IN_SECOND = 300
 
 
@@ -56,25 +55,27 @@ class Device:
             alexa_pages.move_to_all_devices_page()
             alexa_pages.power_off_dut()
 
-    @abstractmethod
-    def pre_associate_with_customer_id(self):
-        raise NotImplementedError()
+    def factory_reset_and_power_off(self):
+        with self.alexa_app.appium_conn_context() as driver:
+            alexa_pages = AlexaAppPageObjects(driver, self.names)
+            alexa_pages.move_to_all_devices_page()
+            alexa_pages.delete_dut()
+            alexa_pages.power_off_dut()
 
     def power_cycle_provisioner(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
             alexa_pages.move_to_all_devices_page()
-            alexa_pages.power_cycle_provisioner()
+            alexa_pages.power_off_and_on_provisioner()
         time.sleep(SLEEP_TIME_WAIT_FOR_PROVISIONER_IN_SECOND)
 
-    def power_on(self):
+    def power_on_and_check_setup(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
             alexa_pages.move_to_all_devices_page()
             alexa_pages.power_on_dut()
-
-    def check_device_setup(self):
-        with self.alexa_app.appium_conn_context() as driver:
-            alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            setup_time = time.time()
+            alexa_pages.click_navigate_back_from_plug_device_page()
             alexa_pages.wait_until_smart_dut_present(SLEEP_TIME_WAIT_FOR_SMART_DUT_PRESENT_IN_SECOND)
+            setup_time = time.time() - setup_time
+            logging.info(f'The setup time of smart device "{self.names[2]}" is {setup_time:.2f} seconds')

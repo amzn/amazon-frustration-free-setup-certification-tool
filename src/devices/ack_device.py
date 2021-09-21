@@ -17,10 +17,14 @@ from src.device import *
 
 class ACKDevice(Device):
 
-    def pre_associate_with_customer_id(self):
-        # TODO: Call the API to pre associate the device with customer id
-        logging.info("ACK device has not been supported by this automation tool yet.")
-        pass
+    def __init__(self, names):
+        super().__init__(names)
+
+    def factory_reset_and_power_off(self):
+        logging.info("ACK device has not been supported by this certification tool yet.")
 
     def power_cycle_provisioner(self):
         logging.info('No need to power cycle provisioner for ACK device ZTS setup.')
+
+    def power_on_and_check_setup(self):
+        logging.info("ACK device has not been supported by this certification tool yet.")
