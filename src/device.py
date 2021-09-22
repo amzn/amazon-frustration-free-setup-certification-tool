@@ -14,13 +14,8 @@
 
 import logging
 import time
-from abc import abstractmethod
-
 from src.appium_conn import get_phone_uuid, AppiumConn
 from src.alexa_app_page_objects import AlexaAppPageObjects
-
-# Number of swipe in order to find smart device from your all devices list, adjust it if required
-NUM_OF_SWIPE_TO_FIND_DEVICE = 2
 
 # Timeouts
 SLEEP_TIME_WAIT_FOR_PROVISIONER_IN_SECOND = 60

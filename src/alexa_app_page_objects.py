@@ -40,6 +40,8 @@ NUM_OF_SWIPE_TO_FIND_DEVICE = 2
 
 # Timeouts
 SLEEP_TIME_BEFORE_PROVISIONER_POWER_ON_IN_SECOND = 10
+TIMEOUT_MEDIUM = 10
+TIMEOUT_SMALL = 2
 
 
 class AlexaAppPageObjects:
@@ -60,32 +62,35 @@ class AlexaAppPageObjects:
         self.smart_dut = SMART_DEVICE_LOCATOR_TEMP.replace('NAME', self.device_names[2])
         self.smart_dut_title = SMART_DEVICE_TITLE_LOCATOR_TEMP.replace('NAME', self.device_names[2].upper())
 
-    def click_devices_from_home_page(self):
+    def click_devices_from_home_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking "Devices" button')
-        assert click_element(self.driver, 10, DEVICES_LOCATOR), 'Cannot click on "Devices" button'
+        assert click_element(self.driver, timeout, DEVICES_LOCATOR), 'Cannot click on "Devices" button'
 
-    def is_smart_device_responsive(self):
+    # DUT might not be responsive, then removing the device from Alexa App might not factory reset it and a hard reset
+    # is needed. This is the checking to halt the execution in that case.
+    def is_smart_device_responsive(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Checking "Device is unresponsive" message')
-        if verify_if_element_is_present(self.driver, 10, self.smart_dut_title):
-            if verify_if_element_is_not_present(self.driver, 10, SMART_DEVICE_UNRESPONSIVE):
+        if verify_if_element_is_present(self.driver, timeout, self.smart_dut_title):
+            if verify_if_element_is_not_present(self.driver, timeout, SMART_DEVICE_UNRESPONSIVE):
                 return
         assert False, f'[Alexa App] Smart device "{self.device_names[2]}" not responsive, ' \
                       f'please do factory reset manually'
 
-    def is_on_devices_page(self, timeout=10):
+    def is_on_devices_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Checking whether it is on device page')
         return verify_if_element_is_present(self.driver, timeout, DEVICES_PAGE_TITLE)
 
-    def is_on_all_devices_page(self, timeout=10):
+    def is_on_all_devices_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Checking whether it is on ALL Devices page')
         return verify_if_element_is_present(self.driver, timeout, ALL_DEVICES_PAGE_TITLE)
 
-    def swipe_and_click_all_devices(self):
-        swipe_screen(self.driver, 0.70, 0.30, 0.17, 0.17)
+    def swipe_and_click_all_devices(self, timeout=TIMEOUT_MEDIUM):
+        # Swipe the screen to show all devices button
+        swipe_screen(self.driver, start_x_p=0.70, end_x_p=0.30, start_y_p=0.17, end_y_p=0.17)
         logging.info('[Alexa App] Clicking "All Devices" button')
-        assert click_element(self.driver, 10, ALL_DEVICES_LOCATOR), 'Cannot click on "All Devices"'
+        assert click_element(self.driver, timeout, ALL_DEVICES_LOCATOR), 'Cannot click on "All Devices"'
 
-    def click_smart_device_from_all_devices_page(self, smart_device, times=10):
+    def click_smart_device_from_all_devices_page(self, smart_device, times):
         m = re.search('@text="([\\w|\\s]+)"', smart_device)
         name_of_smart_device = m.group(1)
         logging.info(f'[Alexa App] Clicking smart device "{name_of_smart_device}"')
@@ -93,37 +98,40 @@ class AlexaAppPageObjects:
             if click_element(self.driver, times, smart_device):
                 return
             else:
-                swipe_screen(self.driver, 0.50, 0.50, 0.70, 0.30)
+                # Swipe the screen to find the smart device from list
+                swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.70, end_y_p=0.30)
         assert click_element(self.driver, times, smart_device), \
             f'Cannot click on smart device "{name_of_smart_device}".'
 
-    def click_settings_from_smart_device_page(self):
+    def click_settings_from_smart_device_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking the settings icon')
-        assert click_element(self.driver, 10, SMART_DEVICE_CONFIG_LOCATOR), 'Cannot click the settings icon'
+        assert click_element(self.driver, timeout, SMART_DEVICE_CONFIG_LOCATOR), 'Cannot click the settings icon'
 
-    def click_delete_from_smart_device_config_page(self):
+    def click_delete_from_smart_device_config_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking the delete icon')
-        assert click_element(self.driver, 10, SMART_DEVICE_DELETE_LOCATOR), 'Cannot click the delete icon'
+        assert click_element(self.driver, timeout, SMART_DEVICE_DELETE_LOCATOR), 'Cannot click the delete icon'
 
-    def click_delete_confirm_from_smart_device_config_page(self):
+    def click_delete_confirm_from_smart_device_config_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking "DELETE" button to confirm')
-        assert click_element(self.driver, 10, SMART_DEVICE_DELETE_CONFIRM_LOCATOR), 'Cannot click "DELETE" button'
+        assert click_element(self.driver, timeout, SMART_DEVICE_DELETE_CONFIRM_LOCATOR), 'Cannot click "DELETE" button'
 
-    def click_power_off_from_plug_device_page(self):
+    def click_power_off_from_plug_device_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking the power icon to turn it off')
-        assert click_element(self.driver, 10, PLUG_DEVICE_POWER_ON_LOCATOR), 'Cannot click the power icon'
-        assert verify_if_element_is_present(self.driver, 10, PLUG_DEVICE_POWER_OFF_LOCATOR), \
+        assert click_element(self.driver, timeout, PLUG_DEVICE_POWER_ON_LOCATOR), 'Cannot click the power icon'
+        assert verify_if_element_is_present(self.driver, timeout, PLUG_DEVICE_POWER_OFF_LOCATOR), \
             'Cannot switch to power off'
 
-    def click_power_on_from_plug_device_page(self):
+    def click_power_on_from_plug_device_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking the power icon to turn it on')
-        assert click_element(self.driver, 10, PLUG_DEVICE_POWER_OFF_LOCATOR), 'Cannot click the power icon'
-        assert verify_if_element_is_present(self.driver, 10, PLUG_DEVICE_POWER_ON_LOCATOR), 'Cannot switch to power on'
+        assert click_element(self.driver, timeout, PLUG_DEVICE_POWER_OFF_LOCATOR), 'Cannot click the power icon'
+        assert verify_if_element_is_present(self.driver, timeout, PLUG_DEVICE_POWER_ON_LOCATOR), \
+            'Cannot switch to power on'
 
-    def is_smart_dut_present(self):
+    def is_smart_dut_present(self, timeout=TIMEOUT_MEDIUM):
         logging.info(f'[Alexa App] Checking smart device "{self.device_names[2]}"')
-        swipe_screen(self.driver, 0.50, 0.50, 0.30, 0.70)
-        return verify_if_element_is_present(self.driver, 10, self.smart_dut)
+        # Swipe the screen to refresh all devices page
+        swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.30, end_y_p=0.70)
+        return verify_if_element_is_present(self.driver, timeout, self.smart_dut)
 
     def wait_until_smart_dut_present(self, timeout):
         time_start = time.time()
@@ -157,7 +165,7 @@ class AlexaAppPageObjects:
             self.click_delete_confirm_from_smart_device_config_page()
 
     def power_off_dut(self):
-        if not self.is_on_all_devices_page(timeout=2) and self.is_on_devices_page(timeout=2):
+        if not self.is_on_all_devices_page(timeout=TIMEOUT_SMALL) and self.is_on_devices_page(timeout=TIMEOUT_SMALL):
             self.swipe_and_click_all_devices()
 
         self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut, NUM_OF_SWIPE_TO_FIND_DEVICE)
@@ -179,7 +187,7 @@ class AlexaAppPageObjects:
         self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut, NUM_OF_SWIPE_TO_FIND_DEVICE)
         self.click_power_on_from_plug_device_page()
 
-    def click_navigate_back_from_plug_device_page(self):
+    def click_navigate_back_from_plug_device_page(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Clicking the navigate back icon')
-        assert click_element(self.driver, 10, PLUG_DEVICE_BACK_LOCATOR), 'Cannot click the navigate back icon'
+        assert click_element(self.driver, timeout, PLUG_DEVICE_BACK_LOCATOR), 'Cannot click the navigate back icon'
         assert self.is_on_all_devices_page(), 'Cannot navigate to "ALL DEVICES" page'

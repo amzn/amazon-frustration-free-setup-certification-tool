@@ -113,7 +113,7 @@ Run 5 iterations against ZSS device named "First light" and continue the executi
 
 ## Notes
 * So far the tool only supports multiple rounds of BSS or ZSS test as removing both types of devices from Alexa App will factory reset them
-* It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override methods in wss_device.py
+* It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override methods in wss_device.py (template/psudocodes provided)
 
 ## Security
 
