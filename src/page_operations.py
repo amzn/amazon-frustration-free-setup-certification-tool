@@ -12,7 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import logging
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -74,9 +73,6 @@ def swipe_screen(driver, start_x_p, end_x_p, start_y_p, end_y_p, duration=1000):
     :param duration: time to take the swipe, in ms
     :return: None
     """
-
-    logging.info(f'Swiping from X({start_x_p}), Y({start_y_p}) to X({end_x_p}), '
-                 f'Y({end_y_p})')
     size = driver.get_window_size()
     start_x = int(size['width'] * start_x_p)
     end_x = int(size['width'] * end_x_p)

@@ -14,6 +14,9 @@
 
 import re
 import time
+import logging
+
+from selenium.common.exceptions import NoSuchElementException
 from src.page_operations import *
 
 """
@@ -34,9 +37,10 @@ SMART_DEVICE_UNRESPONSIVE = '//android.widget.TextView[@text="Device is unrespon
 PLUG_DEVICE_POWER_ON_LOCATOR = '//android.widget.Switch[@text="on"]'
 PLUG_DEVICE_POWER_OFF_LOCATOR = '//android.widget.Switch[@text="off"]'
 PLUG_DEVICE_BACK_LOCATOR = '//android.widget.Button[@content-desc="Back"]'
+DEVICE_TYPE_ICONS_Horizontal_ScrollView_CLASS_NAME = 'android.widget.HorizontalScrollView'
+ALL_DEVICES_ScrollView_CLASS_NAME = 'android.widget.ScrollView'
 
-# Number of swipe in order to find smart device from your all devices list, adjust it if required
-NUM_OF_SWIPE_TO_FIND_DEVICE = 2
+MAX_SWIPES_OF_SCROLL_TO_END = 5
 
 # Timeouts
 SLEEP_TIME_BEFORE_PROVISIONER_POWER_ON_IN_SECOND = 10
@@ -85,22 +89,21 @@ class AlexaAppPageObjects:
         return verify_if_element_is_present(self.driver, timeout, ALL_DEVICES_PAGE_TITLE)
 
     def swipe_and_click_all_devices(self, timeout=TIMEOUT_MEDIUM):
-        # Swipe the screen to show all devices button
-        swipe_screen(self.driver, start_x_p=0.70, end_x_p=0.30, start_y_p=0.17, end_y_p=0.17)
+        logging.info('[Alexa App] Swiping devices buttons to the right end to show "All Devices" button')
+        self.driver.find_element_by_android_uiautomator(
+            'new UiScrollable(new UiSelector().className("' + DEVICE_TYPE_ICONS_Horizontal_ScrollView_CLASS_NAME +
+            '").instance(0)).setAsHorizontalList().scrollToEnd(' + str(MAX_SWIPES_OF_SCROLL_TO_END) + ');')
         logging.info('[Alexa App] Clicking "All Devices" button')
         assert click_element(self.driver, timeout, ALL_DEVICES_LOCATOR), 'Cannot click on "All Devices"'
 
-    def click_smart_device_from_all_devices_page(self, smart_device, times):
+    def click_smart_device_from_all_devices_page(self, smart_device, timeout=TIMEOUT_MEDIUM):
         m = re.search('@text="([\\w|\\s]+)"', smart_device)
         name_of_smart_device = m.group(1)
-        logging.info(f'[Alexa App] Clicking smart device "{name_of_smart_device}"')
-        for _ in range(times):
-            if click_element(self.driver, times, smart_device):
-                return
-            else:
-                # Swipe the screen to find the smart device from list
-                swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.70, end_y_p=0.30)
-        assert click_element(self.driver, times, smart_device), \
+        logging.info(f'[Alexa App] Searching and clicking smart device "{name_of_smart_device}"')
+        self.driver.find_element_by_android_uiautomator(
+            'new UiScrollable(new UiSelector().className("' + ALL_DEVICES_ScrollView_CLASS_NAME + '").instance(0))'
+            '.scrollIntoView(new UiSelector().text("' + name_of_smart_device + '").instance(0));')
+        assert click_element(self.driver, timeout, smart_device), \
             f'Cannot click on smart device "{name_of_smart_device}".'
 
     def click_settings_from_smart_device_page(self, timeout=TIMEOUT_MEDIUM):
@@ -127,8 +130,8 @@ class AlexaAppPageObjects:
         assert verify_if_element_is_present(self.driver, timeout, PLUG_DEVICE_POWER_ON_LOCATOR), \
             'Cannot switch to power on'
 
-    def is_smart_dut_present(self, timeout=TIMEOUT_MEDIUM):
-        logging.info(f'[Alexa App] Checking smart device "{self.device_names[2]}"')
+    def is_smart_dut_present(self, timeout=TIMEOUT_SMALL):
+        logging.info(f'[Alexa App] Refreshing screen and checking smart device "{self.device_names[2]}"')
         # Swipe the screen to refresh all devices page
         swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.30, end_y_p=0.70)
         return verify_if_element_is_present(self.driver, timeout, self.smart_dut)
@@ -139,7 +142,6 @@ class AlexaAppPageObjects:
         while time.time() < time_stop:
             if self.is_smart_dut_present():
                 return
-            time.sleep(1)
         assert False, f'The smart device "{self.device_names[2]}" not found within {timeout/60} minutes'
 
     def move_to_all_devices_page(self):
@@ -152,8 +154,8 @@ class AlexaAppPageObjects:
         # Deregister DUT by deleting it from configuration page
         smart_dut_found = True
         try:
-            self.click_smart_device_from_all_devices_page(self.smart_dut, NUM_OF_SWIPE_TO_FIND_DEVICE)
-        except AssertionError:
+            self.click_smart_device_from_all_devices_page(self.smart_dut)
+        except (NoSuchElementException, AssertionError):
             smart_dut_found = False
             logging.info(f'[Alexa App] Smart device "{self.device_names[2]}" not found in all devices page')
 
@@ -168,14 +170,14 @@ class AlexaAppPageObjects:
         if not self.is_on_all_devices_page(timeout=TIMEOUT_SMALL) and self.is_on_devices_page(timeout=TIMEOUT_SMALL):
             self.swipe_and_click_all_devices()
 
-        self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut, NUM_OF_SWIPE_TO_FIND_DEVICE)
+        self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut)
         try:
             self.click_power_off_from_plug_device_page()
         except AssertionError:
             logging.info(f'Plug device "{self.device_names[0]}" is in power off mode')
 
     def power_off_and_on_provisioner(self):
-        self.click_smart_device_from_all_devices_page(self.smart_plug_of_provisioner, NUM_OF_SWIPE_TO_FIND_DEVICE)
+        self.click_smart_device_from_all_devices_page(self.smart_plug_of_provisioner)
         try:
             self.click_power_off_from_plug_device_page()
             time.sleep(SLEEP_TIME_BEFORE_PROVISIONER_POWER_ON_IN_SECOND)
@@ -184,7 +186,7 @@ class AlexaAppPageObjects:
         self.click_power_on_from_plug_device_page()
 
     def power_on_dut(self):
-        self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut, NUM_OF_SWIPE_TO_FIND_DEVICE)
+        self.click_smart_device_from_all_devices_page(self.smart_plug_of_dut)
         self.click_power_on_from_plug_device_page()
 
     def click_navigate_back_from_plug_device_page(self, timeout=TIMEOUT_MEDIUM):
