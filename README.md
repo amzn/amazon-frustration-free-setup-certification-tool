@@ -21,6 +21,7 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
     * Please plug the provisioner device on top of the other smart plug, and turn it **ON**.
 * Please submit your DUT to pre-register our device setup service via [Submit Test Devices](https://developer.amazon.com/frustration-free-setup/console/manage/submit-test-devices)
 
+![Diagram of Test Environment](diagram.png)
 
 ## Test Machine Environment setup
 
