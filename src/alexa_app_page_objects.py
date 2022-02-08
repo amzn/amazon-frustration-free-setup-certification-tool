@@ -26,7 +26,7 @@ Ref: https://github.com/appium/appium-desktop#the-appium-desktop-inspector
 """
 DEVICES_LOCATOR = '//android.widget.LinearLayout[@content-desc="Tab, Devices"]'
 DEVICES_PAGE_TITLE = '//android.view.View[@text="DEVICES"]'
-ALL_DEVICES_LOCATOR = '//android.widget.Button[@content-desc="All Devices"]'
+ALL_DEVICES_LOCATOR = '//android.view.ViewGroup[@content-desc="All Devices"]'
 ALL_DEVICES_PAGE_TITLE = '//android.view.View[@text="ALL DEVICES"]'
 SMART_DEVICE_LOCATOR_TEMP = '//android.widget.TextView[@text="NAME"]'
 SMART_DEVICE_TITLE_LOCATOR_TEMP = '//android.view.View[@text="NAME"]'
@@ -95,6 +95,7 @@ class AlexaAppPageObjects:
             '").instance(0)).setAsHorizontalList().scrollToEnd(' + str(MAX_SWIPES_OF_SCROLL_TO_END) + ');')
         logging.info('[Alexa App] Clicking "All Devices" button')
         assert click_element(self.driver, timeout, ALL_DEVICES_LOCATOR), 'Cannot click on "All Devices"'
+        assert self.is_on_all_devices_page(), 'Cannot navigate to "ALL DEVICES" page'
 
     def click_smart_device_from_all_devices_page(self, smart_device, timeout=TIMEOUT_MEDIUM):
         m = re.search('@text="([\\w|\\s]+)"', smart_device)
