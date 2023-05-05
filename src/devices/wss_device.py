@@ -18,7 +18,7 @@ from src.device import *
 class WSSDevice(Device):
 
     def __init__(self, names):
-        logging.info("Need to override __init__() to support WSS.")
+        logging.info("Need to override __init__() to support WSS")
         super().__init__(names)
         # Please define appium connection instance with 3P app desired capabilities here and take the example below
         # as reference.
@@ -38,8 +38,8 @@ class WSSDevice(Device):
         '''
 
     def factory_reset_and_power_off(self):
-        logging.info("Need to override factory_reset_and_power_off() to support WSS.")
-        # First, please remove DUT within your app's appium connection context here and you can take the
+        logging.info("Need to override factory_reset_and_power_off() to support WSS")
+        # First, please remove DUT within your app's appium connection context here, and you can take the
         # template/pseudocode below as reference. You could write a class to remove device action and define all related
         # page objects (take delete_dut() from alexa_app_page_objects.py as reference); super().names[2] is the name of
         # DUT displayed on both Alexa App and 3P app by default.
@@ -54,10 +54,10 @@ class WSSDevice(Device):
         '''
 
     def power_cycle_provisioner(self):
-        logging.info('No need to power cycle the provisioner for WSS device ZTS setup.')
+        logging.info('No need to power cycle the provisioner for WSS device ZTS setup')
 
     def power_on_and_check_setup(self):
-        logging.info("Need to override power_on_and_check_setup() to support WSS.")
+        logging.info("Need to override power_on_and_check_setup() to support WSS")
         # First, please call power_on_and_check_setup() from device.py to turn on the DUT and check it from Alexa App.
         '''
         super().power_on_and_check_setup()

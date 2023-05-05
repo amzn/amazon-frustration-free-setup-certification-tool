@@ -21,10 +21,10 @@ class ACKDevice(Device):
         super().__init__(names)
 
     def factory_reset_and_power_off(self):
-        logging.info("ACK device has not been supported by this certification tool yet.")
+        logging.info("ACK device has not been supported by this certification tool yet")
 
     def power_cycle_provisioner(self):
-        logging.info('No need to power cycle provisioner for ACK device ZTS setup.')
+        logging.info('No need to power cycle provisioner for ACK device ZTS setup')
 
     def power_on_and_check_setup(self):
-        logging.info("ACK device has not been supported by this certification tool yet.")
+        logging.info("ACK device has not been supported by this certification tool yet")

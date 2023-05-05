@@ -93,9 +93,7 @@ class AppiumConn:
         else:
             url = f'http://localhost:{AppiumConn.port}/wd/hub'
         self.driver = Remote(url, self.caps, keep_alive=True)
-
-        app_capabilities = json.dumps(self.caps)
-        logging.info(f'Appium Client is ready with capacities {app_capabilities}')
+        logging.info(f'Appium Client is started')
 
     @contextmanager
     def appium_conn_context(self, ext_appium_server_url=None):

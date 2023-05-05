@@ -13,19 +13,19 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
 * 1 Android phone in USB debugging mode
     * Alexa App installed and login with your Amazon account
     * The phone is connected with your test machine (Windows, MacOS or Linux) with USB connection.
-* 1 Provisioner device, which is registered to your Amazon account, see recommended devices from [Understanding Frustration-Free Setup - Testing Your Device](https://developer.amazon.com/docs/frustration-free-setup/understanding-ffs.html#testing-your-device)
-* 1 Provisionee device, your device under test, called DUT in this document
+* 1 Provisioner/commissioner device, which is registered to your Amazon account, see recommended devices from [Understanding Frustration-Free Setup - Testing Your Device](https://developer.amazon.com/docs/frustration-free-setup/understanding-ffs.html#testing-your-device)
+* 1 Provisionee/commissionee device, your device under test, called DUT in this document
 * 2 Control devices, [Amazon Smart Plugs](https://www.amazon.com/dp/B089DR29T6) are recommended
     * Please register both to your Amazon account.
-    * Please plug DUT on top of one smart plug, and turn that plug **ON** if DUT has been registered to your Amazon account, or **OFF** if DUT is in factory reset mode.
-    * Please plug the provisioner device on top of the other smart plug, and turn it **ON**.
-* Please submit your DUT to pre-register our device setup service via [Submit Test Devices](https://developer.amazon.com/frustration-free-setup/console/manage/submit-test-devices)
+    * Please plug DUT on top of the first smart plug, the plug is **OFF** and DUT is in factory reset mode.
+    * Please plug the provisioner/commissioner device on top of the second smart plug, the plug is **ON**. DO NOT need it for Matter Simple Setup, commissioner device is always **ON**.
+* Please register your DUT via [Submit Test Devices](https://developer.amazon.com/frustration-free-setup/console/manage/submit-test-devices)
 
 ![Diagram of Test Environment](diagram.png)
 
 ## Test Machine Environment setup
 
-* Please download and install **Python3 (>=3.7), JDK, Android SDK, and Appium (1.20.2)** 
+* Please download and install **Python3 (>=3.7), JDK, Android SDK, and Appium (1.22.3)** 
 * Please configure $PATH, $JAVA_HOME and $ANDROID_HOME to run **adb** and **appium** commands
 * Please run the commands below to verify the environment setup
 ```
@@ -40,7 +40,7 @@ Installed as ***/Android/sdk/platform-tools/adb
 ```
 ```
 $ appium --version
-1.20.2
+1.22.3
 ```
 
 ## Run Test Scripts
@@ -76,7 +76,7 @@ $ source venv/bin/activate
 **Options:**
 
 **--ffs_type**
-* FFS protocol type, one of ["BSS", "ZSS"], "BSS" as default
+* FFS protocol type, one of ["BSS", "ZSS", "MSS"], "BSS" as default
 
 **--name_of_plug_to_control_dut**
 * Name of the smart plug (displayed on Alexa App) to power on and off DUT, **"First plug"** as default</br>
@@ -94,13 +94,13 @@ $ source venv/bin/activate
 * Num of iterations
 
 **-x**
-* Use it to stop the execution if any iteration failed
+* Use it to stop the execution if any iteration failed (it's recommended)
 
 **Examples:**
 
-Run 10 iterations against BSS device named "First switch" and stop the execution if any iteration failed
+Run 10 iterations against Matter device named "First switch" and stop the execution if any iteration failed
 ```
-(<your_venv_name>) pytest --ffs_type=BSS --name_of_dut="First switch" --count=10 -x
+(<your_venv_name>) pytest --ffs_type=MSS --name_of_dut="First switch" --count=10 -x
 ```
 Run 5 iterations against ZSS device named "First light" and continue the execution if some iterations failed
 ```
@@ -113,7 +113,7 @@ Run 5 iterations against ZSS device named "First light" and continue the executi
 * **appium_server_log.txt** from logs folder includes all appium_server logs during the test
 
 ## Notes
-* So far the tool only supports multiple rounds of BSS or ZSS test as removing both types of devices from Alexa App will factory reset them
+* So far the tool only supports multiple rounds of BSS,ZSS and MSS test as removing both types of devices from Alexa App will factory reset them
 * It could support WSS over Wifi if removing a WSS over Wifi device from the third party app can factory reset it and you need to override methods in wss_device.py (template/psudocodes provided)
 
 ## Security

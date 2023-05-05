@@ -18,6 +18,7 @@ import logging
 
 from selenium.common.exceptions import NoSuchElementException
 from src.page_operations import *
+from appium.webdriver.common.mobileby import MobileBy
 
 """
 Locator for Android Alexa App
@@ -25,7 +26,7 @@ There are main types of selector can be used to find elements, By.XPATH is used 
 Ref: https://github.com/appium/appium-desktop#the-appium-desktop-inspector
 """
 DEVICES_LOCATOR = '//android.widget.LinearLayout[@content-desc="Tab, Devices"]'
-DEVICES_PAGE_TITLE = '//android.view.View[@text="DEVICES"]'
+DEVICES_PAGE_TITLE = '//android.view.View[@resource-id="devicePageHeader"]'
 ALL_DEVICES_LOCATOR = '//android.view.ViewGroup[@content-desc="All Devices"]'
 ALL_DEVICES_PAGE_TITLE = '//android.view.View[@text="ALL DEVICES"]'
 SMART_DEVICE_LOCATOR_TEMP = '//android.widget.TextView[@text="NAME"]'
@@ -39,6 +40,7 @@ PLUG_DEVICE_POWER_OFF_LOCATOR = '//android.widget.Switch[@text="off"]'
 PLUG_DEVICE_BACK_LOCATOR = '//android.widget.Button[@content-desc="Back"]'
 DEVICE_TYPE_ICONS_Horizontal_ScrollView_CLASS_NAME = 'android.widget.HorizontalScrollView'
 ALL_DEVICES_ScrollView_CLASS_NAME = 'android.widget.ScrollView'
+OK_BUTTON_ON_FST_CARD_LOCATOR = '//android.widget.Button[@resource-id="FullScreenTakeover::PrimaryButton"]'
 
 MAX_SWIPES_OF_SCROLL_TO_END = 5
 
@@ -90,7 +92,7 @@ class AlexaAppPageObjects:
 
     def swipe_and_click_all_devices(self, timeout=TIMEOUT_MEDIUM):
         logging.info('[Alexa App] Swiping devices buttons to the right end to show "All Devices" button')
-        self.driver.find_element_by_android_uiautomator(
+        self.driver.find_element(by=MobileBy.ANDROID_UIAUTOMATOR, value=
             'new UiScrollable(new UiSelector().className("' + DEVICE_TYPE_ICONS_Horizontal_ScrollView_CLASS_NAME +
             '").instance(0)).setAsHorizontalList().scrollToEnd(' + str(MAX_SWIPES_OF_SCROLL_TO_END) + ');')
         logging.info('[Alexa App] Clicking "All Devices" button')
@@ -101,7 +103,7 @@ class AlexaAppPageObjects:
         m = re.search('@text="([\\w|\\s]+)"', smart_device)
         name_of_smart_device = m.group(1)
         logging.info(f'[Alexa App] Searching and clicking smart device "{name_of_smart_device}"')
-        self.driver.find_element_by_android_uiautomator(
+        self.driver.find_element(by=MobileBy.ANDROID_UIAUTOMATOR, value=
             'new UiScrollable(new UiSelector().className("' + ALL_DEVICES_ScrollView_CLASS_NAME + '").instance(0))'
             '.scrollIntoView(new UiSelector().text("' + name_of_smart_device + '").instance(0));')
         assert click_element(self.driver, timeout, smart_device), \
@@ -132,10 +134,14 @@ class AlexaAppPageObjects:
             'Cannot switch to power on'
 
     def is_smart_dut_present(self, timeout=TIMEOUT_SMALL):
-        logging.info(f'[Alexa App] Refreshing screen and checking smart device "{self.device_names[2]}"')
-        # Swipe the screen to refresh all devices page
-        swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.30, end_y_p=0.70)
-        return verify_if_element_is_present(self.driver, timeout, self.smart_dut)
+        logging.info(f'[Alexa App] Refreshing screen and searching smart device "{self.device_names[2]}"')
+        # Return true is there's a full screen takeover card to notify customer that smart device has been found
+        if verify_if_element_is_present(self.driver, timeout, OK_BUTTON_ON_FST_CARD_LOCATOR):
+            return True
+        else:
+            # Swipe the screen to refresh all devices page
+            swipe_screen(self.driver, start_x_p=0.50, end_x_p=0.50, start_y_p=0.30, end_y_p=0.70)
+            return verify_if_element_is_present(self.driver, timeout, self.smart_dut)
 
     def wait_until_smart_dut_present(self, timeout):
         time_start = time.time()

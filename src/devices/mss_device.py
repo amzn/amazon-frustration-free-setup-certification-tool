@@ -12,16 +12,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-[pytest]
-log_cli = True
-log_cli_level = INFO
-log_cli_date_format = %Y-%m-%d %H:%M:%S
-log_cli_format = %(asctime)s %(levelname)s %(message)s
+from src.device import *
 
-log_file = logs/pytest_log.txt
-log_file_level = DEBUG
-log_file_date_format = %Y-%m-%d %H:%M:%S
-log_file_format = %(asctime)s %(levelname)s %(message)s
 
-addopts = --tb=no
-filterwarnings = ignore:.*desired_capabilities has been deprecated:DeprecationWarning
+class MSSDevice(Device):
+
+    def __init__(self, names):
+        super().__init__(names)
+
+    def power_cycle_provisioner(self):
+        logging.info('No need to power cycle commissioner for Matter device ZTS setup')
