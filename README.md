@@ -18,29 +18,35 @@ See [Provisionee Certification Guide](https://developer.amazon.com/docs/frustrat
 * 2 Control devices, [Amazon Smart Plugs](https://www.amazon.com/dp/B089DR29T6) are recommended
     * Please register both to your Amazon account.
     * Please plug DUT on top of the first smart plug, the plug is **OFF** and DUT is in factory reset mode.
-    * Please plug the provisioner/commissioner device on top of the second smart plug, the plug is **ON**. DO NOT need it for Matter Simple Setup, commissioner device is always **ON**.
-* Please register your DUT via [Submit Test Devices](https://developer.amazon.com/frustration-free-setup/console/manage/submit-test-devices)
+    * Please plug the provisioner/commissioner device on top of the second smart plug, the plug is **ON**. 
+* Please register your DUT to your Amazon account, refer to [Submit Test Devices Guideline](https://developer.amazon.com/docs/frustration-free-setup/matter-simple-setup-getting-started.html#test-devices)
 
 ![Diagram of Test Environment](diagram.png)
 
 ## Test Machine Environment setup
 
-* Please download and install **Python3 (>=3.7), JDK, Android SDK, and Appium (1.22.3)** 
-* Please configure $PATH, $JAVA_HOME and $ANDROID_HOME to run **adb** and **appium** commands
-* Please run the commands below to verify the environment setup
+* Please download and install **Python3 (>=3.7), Android SDK, and Appium (2.3.0) with Appium driver uiautomator2 ** 
+* Please configure $PATH and $ANDROID_HOME to enable running **python**, **adb** and **appium** commands under any folder
+* Please run the commands below to verify your environment (the workable environment are listed here for your reference)
 ```
 $ python --version
-Python 3.7.9
+Python 3.9.6
 ```
 ```
 $ adb --version
 Android Debug Bridge version 1.0.41
-Version 30.0.5-6877874
+Version 34.0.5-10900879
 Installed as ***/Android/sdk/platform-tools/adb
+Running on Darwin 22.6.0 (x86_64)
 ```
 ```
 $ appium --version
-1.22.3
+2.3.0
+```
+```
+$ appium driver list --installed
+✔ Listing installed drivers
+- uiautomator2@2.35.0 [installed (npm)]
 ```
 
 ## Run Test Scripts
@@ -76,13 +82,13 @@ $ source venv/bin/activate
 **Options:**
 
 **--ffs_type**
-* FFS protocol type, one of ["BSS", "ZSS", "MSS"], "BSS" as default
+* FFS protocol type, one of ["BSS", "ZSS", "MSS"], "MSS" as default
 
 **--name_of_plug_to_control_dut**
 * Name of the smart plug (displayed on Alexa App) to power on and off DUT, **"First plug"** as default</br>
 
 **--name_of_plug_to_control_provisioner**
-* Name of the smart plug (displayed on Alexa App) to power on and off provisioner, **"Second plug"** as default</br>
+* Name of the smart plug (displayed on Alexa App) to power on and off provisioner/commissioner, **"Second plug"** as default</br>
 
 **--name_of_dut**
 * Name of the device under test displayed on Alexa App after the setup, required option
@@ -94,13 +100,13 @@ $ source venv/bin/activate
 * Num of iterations
 
 **-x**
-* Use it to stop the execution if any iteration failed (it's recommended)
+* Use it to stop the execution if any iteration failed (it's highly recommended)
 
 **Examples:**
 
 Run 10 iterations against Matter device named "First switch" and stop the execution if any iteration failed
 ```
-(<your_venv_name>) pytest --ffs_type=MSS --name_of_dut="First switch" --count=10 -x
+(<your_venv_name>) pytest --name_of_dut="First switch" --count=10 -x
 ```
 Run 5 iterations against ZSS device named "First light" and continue the execution if some iterations failed
 ```

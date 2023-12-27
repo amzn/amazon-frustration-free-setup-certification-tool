@@ -19,7 +19,7 @@ def pytest_addoption(parser):
     parser.addoption(
         '--ffs_type',
         action='store',
-        default='BSS',
+        default='MSS',
         help='FFS protocol type, one of ["BSS", "ZSS", "MSS"] for now'
     )
     parser.addoption(

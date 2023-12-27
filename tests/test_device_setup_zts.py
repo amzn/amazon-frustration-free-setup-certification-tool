@@ -46,7 +46,7 @@ def test_zts(ffs_type, name_of_plug_to_control_dut, name_of_plug_to_control_prov
 
     AppiumConn.start_appium_server(appium_server_port)
     try:
-        logging.info('=================== Before Test: Power cycle the provisioner for BSS and ZSS ===================')
+        logging.info('========== Before Test: Power cycle the provisioner/commissioner for BSS, ZSS or MSS ===========')
         device.power_cycle_provisioner()
         logging.info(f'================= Test Run: Power on "{name_of_dut}" and observe the behavior =================')
         device.power_on_and_check_setup()

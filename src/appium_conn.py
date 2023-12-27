@@ -12,12 +12,12 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import json
 import logging
 import subprocess
 import sys
 import time
 from contextlib import contextmanager
+from appium.options.android import UiAutomator2Options
 from appium.webdriver import Remote
 
 SLEEP_TIME_BEFORE_APPIUM_CLIENT_CONNECT_IN_SECOND = 20
@@ -91,8 +91,8 @@ class AppiumConn:
         if ext_appium_server_url:
             url = ext_appium_server_url
         else:
-            url = f'http://localhost:{AppiumConn.port}/wd/hub'
-        self.driver = Remote(url, self.caps, keep_alive=True)
+            url = f'http://localhost:{AppiumConn.port}'
+        self.driver = Remote(url, options = UiAutomator2Options().load_capabilities(self.caps))
         logging.info(f'Appium Client is started')
 
     @contextmanager

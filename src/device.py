@@ -33,6 +33,7 @@ class Device:
             "appActivity": "com.amazon.dee.app.Launcher",
             "newCommandTimeout": 0,
             "noReset": True,
+            "forceAppLaunch": True,
             "udid": get_phone_uuid(),
             "automationName": "UiAutomator2"
         }
@@ -41,33 +42,33 @@ class Device:
     def factory_reset(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            alexa_pages.move_to_devices_page()
             alexa_pages.delete_dut()
 
     def power_off(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            alexa_pages.move_to_devices_page()
             alexa_pages.power_off_dut()
 
     def factory_reset_and_power_off(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            alexa_pages.move_to_devices_page()
             alexa_pages.delete_dut()
             alexa_pages.power_off_dut()
 
     def power_cycle_provisioner(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            alexa_pages.move_to_devices_page()
             alexa_pages.power_off_and_on_provisioner()
         time.sleep(SLEEP_TIME_WAIT_FOR_PROVISIONER_IN_SECOND)
 
     def power_on_and_check_setup(self):
         with self.alexa_app.appium_conn_context() as driver:
             alexa_pages = AlexaAppPageObjects(driver, self.names)
-            alexa_pages.move_to_all_devices_page()
+            alexa_pages.move_to_devices_page()
             alexa_pages.power_on_dut()
             setup_time = time.time()
             alexa_pages.click_navigate_back_from_plug_device_page()

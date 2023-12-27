@@ -20,5 +20,5 @@ class MSSDevice(Device):
     def __init__(self, names):
         super().__init__(names)
 
-    def power_cycle_provisioner(self):
-        logging.info('No need to power cycle commissioner for Matter device ZTS setup')
+    # def power_cycle_provisioner(self):
+    #    logging.info('No need to power cycle commissioner for Matter device ZTS setup')
